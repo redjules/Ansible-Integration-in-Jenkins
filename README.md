@@ -72,11 +72,43 @@ and the warning has disappeared from the first server:
 ![Screenshot 2024-11-03 at 21 21 26](https://github.com/user-attachments/assets/caef448c-d422-49a9-95ac-4aa66991fa92)
 
 - Add ssh key file credentials in Jenkins for Ansible Control Node server and Ansible Managed Node servers
+
+we create a droplet called ansible-server:
+
+  <img width="607" alt="Screenshot 2024-11-04 at 00 37 42" src="https://github.com/user-attachments/assets/c63135cd-5360-4ebb-9204-9b49fe80e9c3">
+
 - configure Jenkins to execute the Ansible Playbook on remote Ansible Control Node server as part of the CI/CD pipeline
+
+I have created a new global credential named ansible-server-key:
+  <img width="829" alt="Screenshot 2024-11-04 at 23 17 09" src="https://github.com/user-attachments/assets/ddf19ce8-1434-4198-81af-44037c24654c">
+
+In Private Key section, I have copied the private key, which can be obtained with command:
+
+```
+cat ~/.ssh/id_rsa
+```
+
+<img width="414" alt="Screenshot 2024-11-04 at 23 18 54" src="https://github.com/user-attachments/assets/190afb60-33b1-4f91-9dc5-f94ed304a214">
+
+
+<img width="1265" alt="Screenshot 2024-11-04 at 23 20 28" src="https://github.com/user-attachments/assets/3b7b7941-1688-4072-aa78-ee34fa75992c">
+
+we create a new Jenkins credential:
+
+<img width="830" alt="Screenshot 2024-11-04 at 23 28 11" src="https://github.com/user-attachments/assets/54662b9d-64fa-45ec-9f40-a311eecd1b53">
+
+In Private Key section, I have copied the private key from AWS:
+
+<img width="467" alt="Screenshot 2024-11-04 at 23 29 15" src="https://github.com/user-attachments/assets/32afd287-ac08-44d3-b807-bf63e65808e8">
+
+<img width="940" alt="Screenshot 2024-11-04 at 23 29 47" src="https://github.com/user-attachments/assets/be1d5395-2658-4224-ba03-5b1eedbe15df">
+
+The ansible-server-key is used to connect to the Ansible server from Jenkins and this ec2-server-key is going to copy the contents of whatever this private key contains to the Ansible server.
+
 - so the Jenkins configuration will do the following:
 a. Connect to the remote Ansible Control Node server
 b. Copy Ansible playbook and configuration files to the remote ANSIBLE Control Node server
 c. Copy the ssh keys for the Ansible Managed Node servers to the Ansible Control Node server
-d. Install Ansible, Python3, Boto3 on the Ansible Control Noe server
+d. Install Ansible, Python3, Boto3 on the Ansible Control Node server
 e. With everything installed and copied to the remote Ansible Control Node server, execute the playbook remotely on that Control Node that will configure the 2EC2 Managed Nodes
 
